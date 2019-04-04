@@ -25,10 +25,13 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Message;
 import com.tencent.smtt.export.external.interfaces.ClientCertRequest;
 import com.tencent.smtt.export.external.interfaces.HttpAuthHandler;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
@@ -240,6 +243,30 @@ public class X5WebViewClient extends WebViewClient {
         }
     }
 
+    @Override
+    public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest,
+            WebResourceError webResourceError) {
+        super.onReceivedError(webView, webResourceRequest, webResourceError);
+        String desc = webResourceError.getDescription().toString();
+        int code = webResourceError.getErrorCode();
+        onReceivedError(webView, code, desc, webView.getUrl());
+    }
+
+    @Override
+    public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest,
+            WebResourceResponse webResourceResponse) {
+        super.onReceivedHttpError(webView, webResourceRequest, webResourceResponse);
+    }
+
+    @Override
+    public void onTooManyRedirects(WebView webView, Message message, Message message1) {
+        super.onTooManyRedirects(webView, message, message1);
+    }
+
+    @Override
+    public void onDetectedBlankScreen(String s, int i) {
+        super.onDetectedBlankScreen(s, i);
+    }
 
     /**
      * Sets the authentication token.
